@@ -1,6 +1,7 @@
 ''' Deploys configuration and services for the application '''
 
 import os
+import subprocess
 
 from django.core.management.base import BaseCommand
 
@@ -20,14 +21,18 @@ class Command(BaseCommand):
         if not os.path.exists('/etc/conf.d'):
             os.makedirs('/etc/conf.d')
 
-        # Update config files
-        try:
-            project_name = os.path.basename(os.path.normpath(settings.BASE_DIR))
+        project_name = os.path.basename(os.path.normpath(settings.BASE_DIR))
 
+        # ---------------------------- Update Config Files --------------------------- #
+        try:
             for filename in os.listdir(f'{settings.BASE_DIR}/{project_name}/config_files'):
                 with open(os.path.join(f'{settings.BASE_DIR}/{project_name}/config_files', filename), 'r') as file:
                     file_content = file.read()
                     file.close()
+
+                # Create config file if it does not exist
+                with subprocess.Popen(['touch', f'/etc/conf.d/{filename}']) as script:
+                    print(script)
 
                 # Update config file to match
                 with open(f'/etc/conf.d/{filename}') as file:
@@ -49,7 +54,7 @@ class Command(BaseCommand):
             print(err)
 
 
-        # Update service files
+        # --------------------------- Update Service Files --------------------------- #
         services = []
 
         try:
@@ -57,6 +62,10 @@ class Command(BaseCommand):
                 with open(os.path.join(f'{settings.BASE_DIR}/{project_name}/service_files', filename), 'r') as file:
                     file_content = file.read()
                     file.close()
+
+                # Create service file if it does not exist
+                with subprocess.Popen(['touch', f'/etc/systemd/system/{filename}']) as script:
+                    print(script)
 
                 # Update service file to match
                 with open(f'/etc/systemd/system/{filename}') as file:

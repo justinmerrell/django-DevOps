@@ -2,6 +2,8 @@
 
 [![Script Check](https://github.com/justinmerrell/django-DevOps/actions/workflows/shellcheck.yml/badge.svg)](https://github.com/justinmerrell/django-DevOps/actions/workflows/shellcheck.yml)
 
+[![CodeQL](https://github.com/justinmerrell/django-DevOps/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/justinmerrell/django-DevOps/actions/workflows/codeql-analysis.yml)
+
 All the essential tools to go from development to production.
 
 ## Configuration

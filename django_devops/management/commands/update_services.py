@@ -76,7 +76,8 @@ class Command(BaseCommand):
                     file.close()
 
                 if file_content != file_content_old:
-                    with(open(f'/etc/systemd/system/{filename}.old', 'w', encoding='UTF-8')) as file:
+                    file_path="/etc/systemd/system/"
+                    with(open(f'{file_path}{filename}.old', 'w', encoding='UTF-8')) as file:
                         file.write(file_content_old)
                         file.close()
 

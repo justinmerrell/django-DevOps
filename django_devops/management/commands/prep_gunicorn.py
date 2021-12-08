@@ -13,6 +13,7 @@ from django_devops.utils.user_input import query_yes_no
 
 PROJECT_NAME = os.path.basename(os.path.normpath(settings.BASE_DIR))
 
+
 class Command(BaseCommand):
     '''
     Programaticly generates a gunicorn config file.
@@ -31,11 +32,13 @@ class Command(BaseCommand):
                     ''')
 
         # Check if the file exsists and confirm overwrite.
-        if exsists(f'{settings.BASE_DIR}/{PROJECT_NAME}/service_files/gunicorn.service'):
+        if exists(f'{settings.BASE_DIR}/{PROJECT_NAME}/service_files/gunicorn.service'):
             if query_yes_no(f'{PROJECT_NAME}/service_files/gunicorn.service exists. Overwrite?'):
                 pass
             else:
-                raise CommandError(f'{PROJECT_NAME}/service_files/gunicorn.service will not be overwritten.')
+                raise CommandError(f'''
+                            {PROJECT_NAME}/service_files/gunicorn.service will not be overwritten.
+                        '''')
 
             # Generate gunicorn.service file.
             file_template = f'''

@@ -28,7 +28,7 @@ class Command(BaseCommand):
         try:
             file_path = f'{settings.BASE_DIR}/{project_name}/config_files'
             for filename in os.listdir(file_path):
-                with open(os.path.join(file_path), 'r') as file:
+                with open(os.path.join(file_path), 'r', encoding='UTF-8') as file:
                     file_content = file.read()
                     file.close()
 
@@ -37,16 +37,16 @@ class Command(BaseCommand):
                     print(script)
 
                 # Update config file to match
-                with open(f'/etc/conf.d/{filename}') as file:
+                with open(f'/etc/conf.d/{filename}', encoding='UTF-8') as file:
                     file_content_old = file.read()
                     file.close()
 
                 if file_content != file_content_old:
-                    with(open(f'/etc/conf.d/{filename}.old', 'w')) as file:
+                    with(open(f'/etc/conf.d/{filename}.old', 'w', encoding='UTF-8')) as file:
                         file.write(file_content_old)
                         file.close()
 
-                    with open(f'/etc/conf.d/{filename}', 'w') as file:
+                    with open(f'/etc/conf.d/{filename}', 'w', encoding='UTF-8') as file:
                         file.write(file_content)
                         file.close()
 
@@ -62,7 +62,7 @@ class Command(BaseCommand):
         try:
             file_path = f'{settings.BASE_DIR}/{project_name}/service_files'
             for filename in os.listdir(file_path):
-                with open(os.path.join(file_path), 'r') as file:
+                with open(os.path.join(file_path), 'r', encoding='UTF-8') as file:
                     file_content = file.read()
                     file.close()
 
@@ -71,16 +71,16 @@ class Command(BaseCommand):
                     print(script)
 
                 # Update service file to match
-                with open(f'/etc/systemd/system/{filename}') as file:
+                with open(f'/etc/systemd/system/{filename}', encoding='UTF-8') as file:
                     file_content_old = file.read()
                     file.close()
 
                 if file_content != file_content_old:
-                    with(open(f'/etc/systemd/system/{filename}.old', 'w')) as file:
+                    with(open(f'/etc/systemd/system/{filename}.old', 'w', encoding='UTF-8')) as file:
                         file.write(file_content_old)
                         file.close()
 
-                    with open(f'/etc/systemd/system/{filename}', 'w') as file:
+                    with open(f'/etc/systemd/system/{filename}', 'w', encoding='UTF-8') as file:
                         file.write(file_content)
                         file.close()
 

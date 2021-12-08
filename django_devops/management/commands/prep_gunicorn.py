@@ -38,7 +38,7 @@ class Command(BaseCommand):
             else:
                 raise CommandError(f'''
                             {PROJECT_NAME}/service_files/gunicorn.service will not be overwritten.
-                        '''')
+                        ''')
 
             # Generate gunicorn.service file.
             file_template = f'''

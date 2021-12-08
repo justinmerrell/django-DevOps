@@ -3,7 +3,7 @@
 '''
 
 import os
-import subprocess
+import sys
 
 from django.core.management.base import BaseCommand, CommandError
 
@@ -20,6 +20,25 @@ class Command(BaseCommand):
     '''
 
     help = 'Runs through a user guided DevOps review and makes reccomendations as needed.'
+
+    def handle(self, *args, **options):
+        '''
+        1) Make reccomendations for django-devops
+        2)
+        '''
+        # Checks that the folder 'config_files' exists.
+        if not os.path.exists(f'{settings.BASE_DIR}/{PROJECT_NAME}/config_files'):
+            if self.query_yes_no(f'{PROJECT_NAME}/config_files does not exist. Create it?'):
+                os.makedirs(f'{settings.BASE_DIR}/{PROJECT_NAME}/config_files')
+            else:
+                raise CommandError('Please create the folder config_files.')
+
+        # Checks that the folder 'service_files' exists.
+        if not os.path.exists(f'{settings.BASE_DIR}/{PROJECT_NAME}/service_files'):
+            if self.query_yes_no(f'{PROJECT_NAME}/service_files does not exist. Create it?'):
+                os.makedirs(f'{settings.BASE_DIR}/{PROJECT_NAME}/service_files')
+            else:
+                raise CommandError('Please create the folder service_files.')
 
     def query_yes_no(question, default="yes"):
         """Ask a yes/no question via raw_input() and return their answer.
@@ -39,7 +58,7 @@ class Command(BaseCommand):
         elif default == "no":
             prompt = " [y/N] "
         else:
-            raise ValueError("invalid default answer: '%s'" % default)
+            raise ValueError(f"invalid default answer: {default}")
 
         while True:
             sys.stdout.write(question + prompt)
@@ -50,22 +69,3 @@ class Command(BaseCommand):
                 return valid[choice]
             else:
                 sys.stdout.write("Please respond with 'yes' or 'no' " "(or 'y' or 'n').\n")
-
-    def handle(self, *args, **options):
-        '''
-        1) Make reccomendations for django-devops
-        2)
-        '''
-        # Checks that the folder 'config_files' exists.
-        if not os.path.exists(f'{settings.BASE_DIR}/{project_name}/config_files'):
-            if self.query_yes_no(f'{project_name}/config_files does not exist. Create it?'):
-                os.makedirs(f'{settings.BASE_DIR}/{project_name}/config_files')
-            else:
-                raise CommandError('Please create the folder config_files.')
-
-        # Checks that the folder 'service_files' exists.
-        if not os.path.exists(f'{settings.BASE_DIR}/{project_name}/service_files'):
-            if self.query_yes_no(f'{project_name}/service_files does not exist. Create it?'):
-                os.makedirs(f'{settings.BASE_DIR}/{project_name}/service_files')
-            else:
-                raise CommandError('Please create the folder service_files.')

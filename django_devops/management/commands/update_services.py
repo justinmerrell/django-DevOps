@@ -62,7 +62,7 @@ class Command(BaseCommand):
         try:
             file_path = f'{settings.BASE_DIR}/{project_name}/service_files'
             for filename in os.listdir(file_path):
-                with open(os.path.join(file_path) as file:
+                with open(os.path.join(file_path), 'r') as file:
                     file_content = file.read()
                     file.close()
 

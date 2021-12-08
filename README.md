@@ -2,6 +2,7 @@
 
 <h1> django-DevOps </h1>
 
+[![Code Quality](https://github.com/justinmerrell/django-DevOps/actions/workflows/pylint.yml/badge.svg)](https://github.com/justinmerrell/django-DevOps/actions/workflows/pylint.yml)
 [![Script Check](https://github.com/justinmerrell/django-DevOps/actions/workflows/shellcheck.yml/badge.svg)](https://github.com/justinmerrell/django-DevOps/actions/workflows/shellcheck.yml) &nbsp;
 [![CodeQL](https://github.com/justinmerrell/django-DevOps/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/justinmerrell/django-DevOps/actions/workflows/codeql-analysis.yml)
 

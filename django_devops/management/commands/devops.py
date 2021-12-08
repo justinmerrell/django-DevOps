@@ -64,6 +64,8 @@ class Command(BaseCommand):
                 os.makedirs(f'{settings.BASE_DIR}/{PROJECT_NAME}/config_files')
             else:
                 raise CommandError('Please create the folder config_files.')
+        else:
+            print(f'✓ - /{PROJECT_NAME}/config_files exists.')
 
         # Checks that the folder 'service_files' exists.
         if not os.path.exists(f'{settings.BASE_DIR}/{PROJECT_NAME}/service_files'):
@@ -71,3 +73,7 @@ class Command(BaseCommand):
                 os.makedirs(f'{settings.BASE_DIR}/{PROJECT_NAME}/service_files')
             else:
                 raise CommandError('Please create the folder service_files.')
+        else:
+            print(f'✓ - /{PROJECT_NAME}/service_files exists.')
+
+        # -------------------------- Verifies GitHub Actions ------------------------- #

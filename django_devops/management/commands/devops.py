@@ -15,10 +15,15 @@ PROJECT_NAME = os.path.basename(os.path.normpath(settings.BASE_DIR))
 
 
 def get_base_prefix_compat():
-    """Get base/real prefix, or sys.prefix if there is none."""
+    '''
+    Get base/real prefix, or sys.prefix if there is none.
+    '''
     return getattr(sys, "base_prefix", None) or getattr(sys, "real_prefix", None) or sys.prefix
 
 def in_virtualenv():
+    '''
+    Returns True if the code is running inside a virtualenv, False otherwise.
+    '''
     return get_base_prefix_compat() != sys.prefix
 
 
@@ -40,15 +45,15 @@ class Command(BaseCommand):
         # ----------------------------- Verify Compliance ---------------------------- #
         if not os.path.exists(f'/opt/{PROJECT_NAME}'):
             raise CommandError(f'{PROJECT_NAME} is not installed in /opt/')
-        else:
-            print(f'✓ - {PROJECT_NAME} is installed in /opt/')
+        print(f'✓ - {PROJECT_NAME} is installed in /opt/')
 
 
         # ----------------------- Check For Virtual Environment ---------------------- #
-        if in_virtualenv():
-            print(f'✓ - {PROJECT_NAME} is running in a virtual environment')
-        else:
+        if not in_virtualenv():
             raise CommandError(f'{PROJECT_NAME} is not running in a virtual environment')
+        print(f'✓ - {PROJECT_NAME} is running in a virtual environment')
+
+
 
 
         # Checks that the folder 'config_files' exists.

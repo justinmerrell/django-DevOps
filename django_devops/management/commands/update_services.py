@@ -25,28 +25,39 @@ class Command(BaseCommand):
         project_name = os.path.basename(os.path.normpath(settings.BASE_DIR))
 
         # ---------------------------- Update Config Files --------------------------- #
+        nginx = False # Flag to check if an Nginx config file is present.
+
         try:
             file_path = f'{settings.BASE_DIR}/{project_name}/config_files'
+
             for filename in os.listdir(file_path):
                 with open(os.path.join(file_path, filename), 'r', encoding='UTF-8') as file:
                     file_content = file.read()
                     file.close()
 
+                # Handle configfile with same name as project as web service config file.
+                if filename == project_name:
+                    nginx = True
+                    deploy_path = '/etc/nginx/sites-available/'
+                else:
+                    deploy_path = '/etc/conf.d/'
+
+
                 # Create config file if it does not exist
-                with subprocess.Popen(['touch', f'/etc/conf.d/{filename}']) as script:
+                with subprocess.Popen(['touch', f'{deploy_path}{filename}']) as script:
                     print(script)
 
                 # Update config file to match
-                with open(f'/etc/conf.d/{filename}', encoding='UTF-8') as file:
+                with open(f'{deploy_path}{filename}', encoding='UTF-8') as file:
                     file_content_old = file.read()
                     file.close()
 
                 if file_content != file_content_old:
-                    with(open(f'/etc/conf.d/{filename}.old', 'w', encoding='UTF-8')) as file:
+                    with(open(f'{deploy_path}{filename}.old', 'w', encoding='UTF-8')) as file:
                         file.write(file_content_old)
                         file.close()
 
-                    with open(f'/etc/conf.d/{filename}', 'w', encoding='UTF-8') as file:
+                    with open(f'{deploy_path}{filename}', 'w', encoding='UTF-8') as file:
                         file.write(file_content)
                         file.close()
 
@@ -67,11 +78,7 @@ class Command(BaseCommand):
                     file_content = file.read()
                     file.close()
 
-                # Handle configfile with same name as project as web service config file.
-                if filename == project_name:
-                    deploy_path = '/etc/nginx/sites-available/'
-                else:
-                    deploy_path = '/etc/systemd/system/'
+                deploy_path = '/etc/systemd/system/'
 
                 # Create service file if it does not exist
                 with subprocess.Popen(['touch', f'{deploy_path}{filename}']) as script:
@@ -106,6 +113,10 @@ class Command(BaseCommand):
                 os.system(f'systemctl enable {service}')
                 os.system(f'systemctl restart {service}')
                 # os.system('systemctl status *')
+
+            if nginx:
+                os.system(f'''sudo ln -s /etc/nginx/sites-available/{project_name} /etc/nginx/sites-enabled/{project_name}''')
+                os.system('systemctl restart nginx')
 
         except SystemError:
             print('No services found')

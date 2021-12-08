@@ -51,13 +51,13 @@ class Command(BaseCommand):
 
                                 location / {{
                                     include proxy_params;
-                                    proxy_pass http://unix:/opt/{PROJECT_NAME}/run/{PROJECT_NAME}.sock;
+                                    proxy_pass http://unix:/opt/{PROJECT_NAME}/{PROJECT_NAME}.sock;
                                 }}
                            }}
                         '''
 
         file_path = f'{settings.BASE_DIR}/{PROJECT_NAME}/config_files'
-        with open(f'{file_path}/{PROJECT_NAME}', 'r+', encoding='UTF-8') as file:
+        with open(f'{file_path}/{PROJECT_NAME}', 'w+', encoding='UTF-8') as file:
             file.seek(0)
             file.write(dedent(file_template))
             file.truncate()

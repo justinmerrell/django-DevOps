@@ -23,6 +23,8 @@ The goal of this repository is to provide a set of programatic tools to help you
 - Service and Config file management
 - Auto deploy from GIT
 
+No more returning to the same Stackoverflow pages every time you start a new project just to remind yourself what directory config files should be placed in. All files can now be managed from a project level and quickly deployed/updated.
+
 ## Getting Started
 
 To install the package, run the following command:
@@ -46,6 +48,8 @@ For additional pip information visit: [https://pypi.org/project/django-DevOps/](
 ### Configuration Files
 
 Under your project folder create a ```config_files``` and ```service_files``` folder to place files to be deployed.
+
+A config file with the same name as the project will be treated as the NGINX config file and copied to aite-available.
 
 ## Manage Commands
 

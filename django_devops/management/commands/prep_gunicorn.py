@@ -3,6 +3,7 @@ A programatic way to prepare a gunicorn config file.
 '''
 
 import os
+from textwrap import dedent
 from os.path import exists
 
 from django.core.management.base import BaseCommand, CommandError
@@ -46,11 +47,11 @@ class Command(BaseCommand):
                                 Description=gunicorn daemon for {PROJECT_NAME}
                                 After=network.target
 
-                                [service]
+                                [Service]
                                 User=root
-                                Group=root
+                                Group=www-data
                                 WorkingDirectory=/opt/{PROJECT_NAME}/
-                                ExecStart=/opt/{PROJECT_NAME}/venv/bin/gunicorn --access-logfile --workers 3 --bind unix:/opt/{PROJECT_NAME}/{PROJECT_NAME}.sock {PROJECT_NAME}.wsgi:application
+                                ExecStart=/opt/{PROJECT_NAME}/venv/bin/gunicorn --access-logfile - --workers 3 --bind unix:/opt/{PROJECT_NAME}/{PROJECT_NAME}.sock {PROJECT_NAME}.wsgi:application
 
                                 [Install]
                                 WantedBy=multi-user.target
@@ -59,5 +60,5 @@ class Command(BaseCommand):
             file_path = f'{settings.BASE_DIR}/{PROJECT_NAME}/service_files'
             with open(f'{file_path}/gunicorn.service', 'r+', encoding='UTF-8') as file:
                 file.seek(0)
-                file.write(file_template)
+                file.write(dedent(file_template))
                 file.truncate()

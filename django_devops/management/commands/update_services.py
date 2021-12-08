@@ -61,27 +61,33 @@ class Command(BaseCommand):
 
         try:
             file_path = f'{settings.BASE_DIR}/{project_name}/service_files'
+
             for filename in os.listdir(file_path):
                 with open(os.path.join(file_path, filename), 'r', encoding='UTF-8') as file:
                     file_content = file.read()
                     file.close()
 
+                # Handle configfile with same name as project as web service config file.
+                if filename == project_name:
+                    deploy_path = '/etc/nginx/sites-available/'
+                else:
+                    deploy_path = '/etc/systemd/system/'
+
                 # Create service file if it does not exist
-                with subprocess.Popen(['touch', f'/etc/systemd/system/{filename}']) as script:
+                with subprocess.Popen(['touch', f'{deploy_path}{filename}']) as script:
                     print(script)
 
                 # Update service file to match
-                with open(f'/etc/systemd/system/{filename}', encoding='UTF-8') as file:
+                with open(f'{deploy_path}{filename}', encoding='UTF-8') as file:
                     file_content_old = file.read()
                     file.close()
 
-                if file_content != file_content_old:
-                    file_path="/etc/systemd/system/"
-                    with(open(f'{file_path}{filename}.old', 'w', encoding='UTF-8')) as file:
+                if file_content != file_content_old:                    f
+                    with(open(f'{deploy_path}{filename}.old', 'w', encoding='UTF-8')) as file:
                         file.write(file_content_old)
                         file.close()
 
-                    with open(f'/etc/systemd/system/{filename}', 'w', encoding='UTF-8') as file:
+                    with open(f'{deploy_path}{filename}', 'w', encoding='UTF-8') as file:
                         file.write(file_content)
                         file.close()
 

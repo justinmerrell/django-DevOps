@@ -116,7 +116,8 @@ class Command(BaseCommand):
 
             if nginx:
                 ngx = '/etc/nginx/sites-'
-                os.system(f'sudo ln -s {ngx}available/{project_name} {ngx}enabled/{project_name}')
+                if not os.path.exists(f'{ngx}enabled/{project_name}'):
+                    os.system(f'sudo ln -s {ngx}available/{project_name} {ngx}enabled/{project_name}')
                 os.system('systemctl restart nginx')
 
         except SystemError:

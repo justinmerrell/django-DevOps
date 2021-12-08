@@ -3,6 +3,7 @@
 '''
 
 import os
+import sys
 
 from django.core.management.base import BaseCommand, CommandError
 
@@ -11,6 +12,14 @@ from django.conf import settings
 from django_devops.utils.user_input import query_yes_no
 
 PROJECT_NAME = os.path.basename(os.path.normpath(settings.BASE_DIR))
+
+
+def get_base_prefix_compat():
+    """Get base/real prefix, or sys.prefix if there is none."""
+    return getattr(sys, "base_prefix", None) or getattr(sys, "real_prefix", None) or sys.prefix
+
+def in_virtualenv():
+    return get_base_prefix_compat() != sys.prefix
 
 
 class Command(BaseCommand):
@@ -31,6 +40,16 @@ class Command(BaseCommand):
         # ----------------------------- Verify Compliance ---------------------------- #
         if not os.path.exists(f'/opt/{PROJECT_NAME}'):
             raise CommandError(f'{PROJECT_NAME} is not installed in /opt/')
+        else:
+            print(f'✓ - {PROJECT_NAME} is installed in /opt/')
+
+
+        # ----------------------- Check For Virtual Environment ---------------------- #
+        if in_virtualenv():
+            print(f'✓ - {PROJECT_NAME} is running in a virtual environment')
+        else:
+            raise CommandError(f'{PROJECT_NAME} is not running in a virtual environment')
+
 
         # Checks that the folder 'config_files' exists.
         if not os.path.exists(f'{settings.BASE_DIR}/{PROJECT_NAME}/config_files'):

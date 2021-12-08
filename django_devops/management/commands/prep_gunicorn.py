@@ -1,0 +1,62 @@
+'''
+A programatic way to prepare a gunicorn config file.
+'''
+
+from os.path import exists
+import sys
+
+from django.core.management.base import BaseCommand
+
+from django.conf import settings
+
+from utils.user_input import query_yes_no
+
+PROJECT_NAME = os.path.basename(os.path.normpath(settings.BASE_DIR))
+
+class Command(BaseCommand):
+    '''
+    Programaticly generates a gunicorn config file.
+    '''
+
+    help = 'Prepare a gunicorn config file.'
+
+    def handle(self, *args, **options):
+        '''
+        Verifies that the service folder exsists for use with django_devops
+        '''
+        if not exists(f'{settings.BASE_DIR}/{PROJECT_NAME}/service_files'):
+            print(f'''
+                    {settings.BASE_DIR}/{PROJECT_NAME}/service_files does not exist. \
+                    First run "python manage.py devops" to configure django_devops.
+                  ''')
+            return False
+
+        # Check if the file exsists and confirm overwrite.
+        if exsists(f'{settings.BASE_DIR}/{PROJECT_NAME}/service_files/gunicorn.service'):
+            if query_yes_no(f'{PROJECT_NAME}/service_files/gunicorn.service exists. Overwrite?'):
+                pass
+            else:
+                print(f'{PROJECT_NAME}/service_files/gunicorn.service will not be overwritten.')
+                return False
+
+            # Generate gunicorn.service file.
+            file_template = f'''
+                                [Unit]
+                                Description=gunicorn daemon for {PROJECT_NAME}
+                                After=network.target
+
+                                [service]
+                                User=root
+                                Group=root
+                                WorkingDirectory=/opt/{PROJECT_NAME}/
+                                ExecStart=/opt/{PROJECT_NAME}/venv/bin/gunicorn --access-logfile --workers 3 --bind unix:/opt/{PROJECT_NAME}/{PROJECT_NAME}.sock {PROJECT_NAME}.wsgi:application
+
+                                [Install]
+                                WantedBy=multi-user.target
+                            '''
+
+            file_path = f'{settings.BASE_DIR}/{PROJECT_NAME}/service_files'
+            with open(f'{file_path}/gunicorn.service', 'r+', encoding='UTF-8') as file:
+                file.seek(0)
+                file.write(file_template)
+                file.truncate()

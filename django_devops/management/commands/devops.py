@@ -60,14 +60,14 @@ class Command(BaseCommand):
         '''
         # Checks that the folder 'config_files' exists.
         if not os.path.exists(f'{settings.BASE_DIR}/{PROJECT_NAME}/config_files'):
-            if self.query_yes_no(f'{PROJECT_NAME}/config_files does not exist. Create it?'):
+            if query_yes_no(f'{PROJECT_NAME}/config_files does not exist. Create it?'):
                 os.makedirs(f'{settings.BASE_DIR}/{PROJECT_NAME}/config_files')
             else:
                 raise CommandError('Please create the folder config_files.')
 
         # Checks that the folder 'service_files' exists.
         if not os.path.exists(f'{settings.BASE_DIR}/{PROJECT_NAME}/service_files'):
-            if self.query_yes_no(f'{PROJECT_NAME}/service_files does not exist. Create it?'):
+            if query_yes_no(f'{PROJECT_NAME}/service_files does not exist. Create it?'):
                 os.makedirs(f'{settings.BASE_DIR}/{PROJECT_NAME}/service_files')
             else:
                 raise CommandError('Please create the folder service_files.')

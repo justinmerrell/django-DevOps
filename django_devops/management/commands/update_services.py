@@ -82,7 +82,7 @@ class Command(BaseCommand):
                     file_content_old = file.read()
                     file.close()
 
-                if file_content != file_content_old:                    f
+                if file_content != file_content_old:
                     with(open(f'{deploy_path}{filename}.old', 'w', encoding='UTF-8')) as file:
                         file.write(file_content_old)
                         file.close()

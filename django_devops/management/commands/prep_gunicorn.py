@@ -2,14 +2,14 @@
 A programatic way to prepare a gunicorn config file.
 '''
 
+import os
 from os.path import exists
-import sys
 
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 
 from django.conf import settings
 
-from utils.user_input import query_yes_no
+from django_devops.utils.user_input import query_yes_no
 
 PROJECT_NAME = os.path.basename(os.path.normpath(settings.BASE_DIR))
 
@@ -25,19 +25,17 @@ class Command(BaseCommand):
         Verifies that the service folder exsists for use with django_devops
         '''
         if not exists(f'{settings.BASE_DIR}/{PROJECT_NAME}/service_files'):
-            print(f'''
-                    {settings.BASE_DIR}/{PROJECT_NAME}/service_files does not exist. \
-                    First run "python manage.py devops" to configure django_devops.
-                  ''')
-            return False
+            raise CommandError(f'''
+                        {settings.BASE_DIR}/{PROJECT_NAME}/service_files does not exist.
+                        First run "python manage.py devops" to configure django_devops.
+                    ''')
 
         # Check if the file exsists and confirm overwrite.
         if exsists(f'{settings.BASE_DIR}/{PROJECT_NAME}/service_files/gunicorn.service'):
             if query_yes_no(f'{PROJECT_NAME}/service_files/gunicorn.service exists. Overwrite?'):
                 pass
             else:
-                print(f'{PROJECT_NAME}/service_files/gunicorn.service will not be overwritten.')
-                return False
+                raise CommandError(f'{PROJECT_NAME}/service_files/gunicorn.service will not be overwritten.')
 
             # Generate gunicorn.service file.
             file_template = f'''

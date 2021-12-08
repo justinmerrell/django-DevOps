@@ -3,13 +3,12 @@
 '''
 
 import os
-import sys
 
 from django.core.management.base import BaseCommand, CommandError
 
 from django.conf import settings
 
-from utils.user_input import query_yes_no
+from django_devops.utils.user_input import query_yes_no
 
 PROJECT_NAME = os.path.basename(os.path.normpath(settings.BASE_DIR))
 
@@ -26,9 +25,13 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         '''
-        1) Make reccomendations for django-devops
-        2)
+        1) Confirms project compliance with django_devops
+        2) Make reccomendations for django-devops
         '''
+        # ----------------------------- Verify Compliance ---------------------------- #
+        if not os.path.exists(f'/opt/{PROJECT_NAME}'):
+            raise CommandError(f'{PROJECT_NAME} is not installed in /opt/')
+
         # Checks that the folder 'config_files' exists.
         if not os.path.exists(f'{settings.BASE_DIR}/{PROJECT_NAME}/config_files'):
             if query_yes_no(f'{PROJECT_NAME}/config_files does not exist. Create it?'):

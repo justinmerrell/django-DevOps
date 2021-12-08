@@ -16,7 +16,6 @@ class Command(BaseCommand):
         '''
         Deploys configuration and services for the application
         '''
-
         # Check if /etc/conf.d/ directory exists
         if not os.path.exists('/etc/conf.d'):
             os.makedirs('/etc/conf.d')

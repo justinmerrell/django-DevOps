@@ -8,7 +8,9 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 
 class Command(BaseCommand):
-    '''Checks that configuration and service files exsist and have not beeen deployed before deploying.'''
+    '''
+    Checks that configuration and service files exsist and have not beeen deployed before deploying
+    '''
 
     help = 'Deploys configuration and services for the application'
 
@@ -24,8 +26,9 @@ class Command(BaseCommand):
 
         # ---------------------------- Update Config Files --------------------------- #
         try:
-            for filename in os.listdir(f'{settings.BASE_DIR}/{project_name}/config_files'):
-                with open(os.path.join(f'{settings.BASE_DIR}/{project_name}/config_files', filename), 'r') as file:
+            file_path = f'{settings.BASE_DIR}/{project_name}/config_files'
+            for filename in os.listdir(file_path):
+                with open(os.path.join(file_path, 'r') as file:
                     file_content = file.read()
                     file.close()
 
@@ -49,16 +52,17 @@ class Command(BaseCommand):
 
                 print(f'Updated {filename}')
 
-        except Exception as err:
-            print(err)
+        except FileNotFoundError:
+            print('No config_files files found')
 
 
         # --------------------------- Update Service Files --------------------------- #
         services = []
 
         try:
-            for filename in os.listdir(f'{settings.BASE_DIR}/{project_name}/service_files'):
-                with open(os.path.join(f'{settings.BASE_DIR}/{project_name}/service_files', filename), 'r') as file:
+            file_path = f'{settings.BASE_DIR}/{project_name}/service_files'
+            for filename in os.listdir(file_path):
+                with open(os.path.join(file_path) as file:
                     file_content = file.read()
                     file.close()
 
@@ -83,8 +87,8 @@ class Command(BaseCommand):
                 services.append(filename)
                 print(f'Updated {filename}')
 
-        except Exception as err:
-            print(err)
+        except FileNotFoundError:
+            print('No service_files files found')
 
 
         # Reload daemon and start services
@@ -96,5 +100,5 @@ class Command(BaseCommand):
                 os.system(f'systemctl restart {service}')
                 # os.system('systemctl status *')
 
-        except Exception as err:
-            print(err)
+        except SystemError:
+            print('No services found')

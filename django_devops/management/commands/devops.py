@@ -4,6 +4,7 @@
 
 import os
 import sys
+import pwd
 
 from django.core.management.base import BaseCommand, CommandError
 
@@ -54,8 +55,7 @@ class Command(BaseCommand):
         print(f'✓ - {PROJECT_NAME} is running in a virtual environment')
 
 
-
-
+        # ------------------------------ Recommendations ----------------------------- #
         # Checks that the folder 'config_files' exists.
         if not os.path.exists(f'{settings.BASE_DIR}/{PROJECT_NAME}/config_files'):
             if query_yes_no(f'{PROJECT_NAME}/config_files does not exist. Create it?'):
@@ -73,5 +73,17 @@ class Command(BaseCommand):
                 raise CommandError('Please create the folder service_files.')
         else:
             print(f'✓ - /{PROJECT_NAME}/service_files exists.')
+
+        # Checks for system user.
+        try:
+            pwd.getpwnam(f'{PROJECT_NAME}')
+            print(f'✓ - System user "{PROJECT_NAME}" exists.')
+        except KeyError:
+            if query_yes_no(f'System user "{PROJECT_NAME}" does not exist. Create it?'):
+                os.system(f'''
+                          adduser --sytem --home=/var/opt/{PROJECT_NAME}
+                          --no-create-home --disabled-password --group={PROJECT_NAME},www-data
+                          --shell=/bin/bash {PROJECT_NAME}
+                          ''')
 
         # -------------------------- Verifies GitHub Actions ------------------------- #

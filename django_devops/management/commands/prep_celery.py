@@ -42,8 +42,7 @@ class Command(BaseCommand):
                         ''')
 
         # Generate celery.service file.
-        file_template = f'''
-                            [Unit]
+        file_template = f'''[Unit]
                             Description = Celery Service
                             After = network.target
 
@@ -89,8 +88,7 @@ class Command(BaseCommand):
                         ''')
 
         # Generate celery.service file.
-        file_template = f'''
-                            # Name of nodes to start.
+        file_template = f'''# Name of nodes to start.
                             CELERYD_NODES="worker"
 
                             CELERY_BIN="/opt/{PROJECT_NAME}/env/bin/celery"
@@ -129,6 +127,9 @@ class Command(BaseCommand):
         # Generate directories for celery.
         if not exists(f'/var/run/celery/'):
             os.makedirs(f'/var/run/celery/')
+            os.system(f'chown -R {PROJECT_NAME}:{PROJECT_NAME} /var/run/celery/')
+
 
         if not exists(f'/var/log/celery/'):
             os.makedirs(f'/var/log/celery/')
+            os.system('chown -R {PROJECT_NAME}:{PROJECT_NAME} /var/log/celery')

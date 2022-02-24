@@ -12,7 +12,8 @@
 
 - [Table of Contents](#table-of-contents)
 - [What is django-DevOps?](#what-is-django-devops)
-- [Getting Started](#getting-Started)
+- [Getting Started](#getting-started)
+  - [Configuration Files](#configuration-files)
 - [Manage Commands](#manage-commands)
 - [Directory Structure](#directory-structure)
 
@@ -54,8 +55,10 @@ A config file with the same name as the project will be treated as the NGINX con
 ## Manage Commands
 
 | Command         | Description                                                                                            |
-|-----------------|--------------------------------------------------------------------------------------------------------|
+| --------------- | ------------------------------------------------------------------------------------------------------ |
 | devops          | Guided project review. (Reccomended)                                                                   |
+| prep_gunicorn   | Prepares the gunicorn config file for use with gunicorn.                                               |
+| prep_celery     | Prepares the celery config file for use with celery.                                                   |
 | update_services | Similar to "collectstatic", this command will deploy config and service files from the project folder. |
 
 ## Directory Structure

@@ -42,19 +42,23 @@ class Command(BaseCommand):
                         ''')
 
         # Generate gunicorn.service file.
-        file_template = f'''
-                            [Unit]
-                            Description=gunicorn daemon for {PROJECT_NAME}
-                            After=network.target
+        file_template = f'''[Unit]
+                            Description = gunicorn daemon for {PROJECT_NAME}
+                            After = network.target
 
                             [Service]
-                            User=root
-                            Group=www-data
-                            WorkingDirectory=/opt/{PROJECT_NAME}/
-                            ExecStart=/opt/{PROJECT_NAME}/venv/bin/gunicorn --access-logfile - --workers 3 --bind unix:/opt/{PROJECT_NAME}/{PROJECT_NAME}.sock {PROJECT_NAME}.wsgi:application
+                            User = {PROJECT_NAME}
+                            Group = {PROJECT_NAME}
+                            WorkingDirectory = /opt/{PROJECT_NAME}/
+
+                            ExecStart   =   /opt/{PROJECT_NAME}/env/bin/gunicorn --access-logfile - --workers 5 --timeout 120 --bind unix:/opt/{PROJECT_NAME}/{PROJECT_NAME}.sock {PROJECT_NAME}.wsgi:application --reload
+
+                            ExecReload  =   /opt/{PROJECT_NAME}/env/bin/gunicorn --access-logfile - --workers 5 --timeout 120 --bind unix:/opt/{PROJECT_NAME}/{PROJECT_NAME}.sock {PROJECT_NAME}.wsgi:application --reload
+
+                            Restart = always
 
                             [Install]
-                            WantedBy=multi-user.target
+                            WantedBy = multi-user.target
                         '''
 
         file_path = f'{settings.BASE_DIR}/{PROJECT_NAME}/service_files'

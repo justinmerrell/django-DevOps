@@ -4,6 +4,7 @@ A set of functions to query the user for input.
 
 import sys
 
+
 def query_yes_no(question, default="yes"):
     """Ask a yes/no question via raw_input() and return their answer.
 
@@ -18,7 +19,7 @@ def query_yes_no(question, default="yes"):
     if default is None:
         prompt = " [y/n] "
     elif default == "yes":
-        prompt = " [Y/n] "
+        prompt = " [y/n] "
     elif default == "no":
         prompt = " [y/N] "
     else:
@@ -33,4 +34,4 @@ def query_yes_no(question, default="yes"):
         if choice in valid:
             return valid[choice]
 
-        sys.stdout.write("Please respond with 'yes' or 'no' " "(or 'y' or 'n').\n")
+        sys.stdout.write("Please respond with 'yes' or 'no' (or 'y' or 'n').\n")

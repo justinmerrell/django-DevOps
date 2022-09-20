@@ -55,16 +55,16 @@ class Command(BaseCommand):
 
                             WorkingDirectory = /opt/{PROJECT_NAME}
 
-                            ExecStart   =   /bin/sh -c '/opt/{PROJECT_NAME}/env/bin/celery multi start ${CELERYD_NODES} \
-                                            -A ${CELERY_APP} --pidfile=${CELERYD_PID_FILE} \
-                                            --logfile=${CELERYD_LOG_FILE} --loglevel=${CELERYD_LOG_LEVEL} $CELERYD_OPTS'
+                            ExecStart   =   /bin/sh -c '/opt/{PROJECT_NAME}/env/bin/celery multi start ${{CELERYD_NODES}} \
+                                            -A ${{CELERY_APP}} --pidfile=${{CELERYD_PID_FILE}} \
+                                            --logfile=${{CELERYD_LOG_FILE}} --loglevel=${{CELERYD_LOG_LEVEL}} $CELERYD_OPTS'
 
-                            ExecStop    =   /bin/sh -c '/opt/{PROJECT_NAME}/env/bin/celery ${CELERY_BIN} multi stopwait ${CELERYD_NODES} \
+                            ExecStop    =   /bin/sh -c '/opt/{PROJECT_NAME}/env/bin/celery ${{CELERY_BIN}} multi stopwait ${{CELERYD_NODES}} \
                                             --pidfile=$CELERYD_PID_FILE'
 
-                            ExecReload  =   /bin/sh -c '/opt/{PROJECT_NAME}/env/bin/celery ${CELERY_BIN} multi restart ${CELERYD_NODES} \
-                                            -A ${CELERY_APP} --pidfile=${CELERYD_PID_FILE} \
-                                            --logfile=${CELERYD_LOG_FILE} --loglevel=${CELERYD_LOG_LEVEL} $CELERYD_OPTS'
+                            ExecReload  =   /bin/sh -c '/opt/{PROJECT_NAME}/env/bin/celery ${{CELERY_BIN}} multi restart ${{CELERYD_NODES}} \
+                                            -A ${{CELERY_APP}} --pidfile=${{CELERYD_PID_FILE}} \
+                                            --logfile=${{CELERYD_LOG_FILE}} --loglevel=${{CELERYD_LOG_LEVEL}} $CELERYD_OPTS'
 
                             Restart=always
 
@@ -125,11 +125,10 @@ class Command(BaseCommand):
             file.truncate()
 
         # Generate directories for celery.
-        if not exists(f'/var/run/celery/'):
-            os.makedirs(f'/var/run/celery/')
+        if not exists('/var/run/celery/'):
+            os.makedirs('/var/run/celery/')
             os.system(f'chown -R {PROJECT_NAME}:{PROJECT_NAME} /var/run/celery/')
 
-
-        if not exists(f'/var/log/celery/'):
-            os.makedirs(f'/var/log/celery/')
+        if not exists('/var/log/celery/'):
+            os.makedirs('/var/log/celery/')
             os.system('chown -R {PROJECT_NAME}:{PROJECT_NAME} /var/log/celery')

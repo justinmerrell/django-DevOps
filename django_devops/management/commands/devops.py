@@ -1,5 +1,5 @@
 '''
-"devops" is a manage.py callable command that is called to run through project reccomendations
+"devops" is a manage.py callable command that is called to run through project recommendations
 '''
 
 import os
@@ -11,6 +11,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 
 from django_devops.utils.user_input import query_yes_no
+
 
 PROJECT_NAME = os.path.basename(os.path.normpath(settings.BASE_DIR))
 
@@ -30,18 +31,18 @@ def in_virtualenv():
 
 class Command(BaseCommand):
     '''
-    Stepts through a user guided review to do the following:
+    Steps through a user guided review to do the following:
     1) Create file locations used by django_devops
     2) Check for the presence of a virtual environment
-    3) Make recomendations for GitHub Actions
+    3) Make recommendations for GitHub Actions
     '''
 
-    help = 'Runs through a user guided DevOps review and makes reccomendations as needed.'
+    help = 'Runs through a user guided DevOps review and makes recommendations as needed.'
 
     def handle(self, *args, **options):
         '''
         1) Confirms project compliance with django_devops
-        2) Make reccomendations for django-devops
+        2) Make recommendations for django-devops
         '''
         # ----------------------------- Verify Compliance ---------------------------- #
         if not os.path.exists(f'/opt/{PROJECT_NAME}'):

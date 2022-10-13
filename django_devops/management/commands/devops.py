@@ -22,6 +22,7 @@ def get_base_prefix_compat():
     '''
     return getattr(sys, "base_prefix", None) or getattr(sys, "real_prefix", None) or sys.prefix
 
+
 def in_virtualenv():
     '''
     Returns True if the code is running inside a virtualenv, False otherwise.
@@ -49,12 +50,15 @@ class Command(BaseCommand):
             raise CommandError(f'{PROJECT_NAME} is not installed in /opt/')
         print(f'✓ - {PROJECT_NAME} is installed in /opt/')
 
-
         # ----------------------- Check For Virtual Environment ---------------------- #
         if not in_virtualenv():
             raise CommandError(f'{PROJECT_NAME} is not running in a virtual environment')
         print(f'✓ - {PROJECT_NAME} is running in a virtual environment')
 
+        # ---------------------------- Check For .env File --------------------------- #
+        if not os.path.exists(f'{settings.BASE_DIR}/{PROJECT_NAME}/.env'):
+            raise CommandError(f'{PROJECT_NAME} is missing a .env file')
+        print(f'✓ - {PROJECT_NAME} has a .env file')
 
         # ------------------------------ Recommendations ----------------------------- #
         # Checks that the folder 'config_files' exists.

@@ -4,11 +4,8 @@ auth.py is callable with manage.py using the command "do_guide_auth"
 
 import os
 
-from django.core.management.base import BaseCommand, CommandError
-
 from django.conf import settings
-
-from django_devops.utils.user_input import query_yes_no
+from django.core.management.base import BaseCommand, CommandError
 
 
 PROJECT_NAME = os.path.basename(os.path.normpath(settings.BASE_DIR))
@@ -20,13 +17,13 @@ def confirm_file(name, path=None):
     If path is set, it will confirm file is in that path.
     Returns True if file is found, False otherwise.
     '''
-    for root, dirs, files in os.walk(os.path.join('opt', PROJECT_NAME)):
+    for root, _, files in os.walk(os.path.join('opt', PROJECT_NAME)):
         if name in files:
             if path:
                 if path in root:
                     return True
-            else:
-                return True
+
+    return False
 
 
 class Command(BaseCommand):
@@ -80,7 +77,7 @@ class Command(BaseCommand):
             errors_found = True
             print('✗ | LOGOUT_REDIRECT_URL is not set in settings.py')
         else:
-            print(f'✓ | LOGOUT_REDIRECT_URL is set in settings.py to {settings.LOGOUT_REDIRECT_URL}')
+            print(f'✓ | LOGOUT_REDIRECT_URL set in settings.py to {settings.LOGOUT_REDIRECT_URL}')
 
         # ------------------------------- Report Errors ------------------------------ #
         if errors_found:

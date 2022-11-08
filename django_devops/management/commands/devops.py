@@ -111,12 +111,12 @@ class Command(BaseCommand):
                 package_name = requirement.split('> | < | =')[0]
                 packages.append(package_name)
 
-        if packages != []:
-            if query_yes_no(f'The following packages do not have a fixed version number: {packages}. Fix them?'):
+        if packages:
+            if query_yes_no(f'These packages are missing fixed versions: {packages}. Fix them?'):
                 os.system(f'pip freeze > /opt/{PROJECT_NAME}/requirements.txt')
             else:
                 raise CommandError('Please fix the version numbers of the packages.')
         else:
-            print(f'✓ - All packages have a fixed version number.')
+            print('✓ - All packages have a fixed version number.')
 
         # -------------------------- Verifies GitHub Actions ------------------------- #

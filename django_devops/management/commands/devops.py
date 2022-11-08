@@ -91,4 +91,32 @@ class Command(BaseCommand):
                           --shell=/bin/bash {PROJECT_NAME}
                           ''')
 
+        # -------------------------- Python Package Versions ------------------------- #
+        # Checks that requirements.txt exists, and if not, creates it.
+        if not os.path.exists(f'/opt/{PROJECT_NAME}/requirements.txt'):
+            if query_yes_no(f'/opt/{PROJECT_NAME}/requirements.txt does not exist. Create it?'):
+                os.system(f'pip freeze > /opt/{PROJECT_NAME}/requirements.txt')
+            else:
+                raise CommandError('Please create the file requirements.txt.')
+        else:
+            print(f'✓ - /opt/{PROJECT_NAME}/requirements.txt exists.')
+
+        # Ensures that packages have a fixed version number.
+        with open(f'/opt/{PROJECT_NAME}/requirements.txt', 'r') as file:
+            requirements = file.readlines()
+
+        packages = []
+        for requirement in requirements:
+            if not '==' in requirement:
+                package_name = requirement.split('> | < | =')[0]
+                packages.append(package_name)
+
+        if packages != []:
+            if query_yes_no(f'The following packages do not have a fixed version number: {packages}. Fix them?'):
+                os.system(f'pip freeze > /opt/{PROJECT_NAME}/requirements.txt')
+            else:
+                raise CommandError('Please fix the version numbers of the packages.')
+        else:
+            print(f'✓ - All packages have a fixed version number.')
+
         # -------------------------- Verifies GitHub Actions ------------------------- #

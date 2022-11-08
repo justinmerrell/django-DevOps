@@ -102,7 +102,7 @@ class Command(BaseCommand):
             print(f'✓ - /opt/{PROJECT_NAME}/requirements.txt exists.')
 
         # Ensures that packages have a fixed version number.
-        with open(f'/opt/{PROJECT_NAME}/requirements.txt', 'r') as file:
+        with open(f'/opt/{PROJECT_NAME}/requirements.txt', 'r', encoding="UTF-8") as file:
             requirements = file.readlines()
 
         packages = []

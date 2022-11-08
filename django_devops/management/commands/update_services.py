@@ -3,13 +3,13 @@
 import os
 import subprocess
 
+from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from django.conf import settings
 
 class Command(BaseCommand):
     '''
-    Checks that configuration and service files exsist and have not beeen deployed before deploying
+    Checks that configuration and service files exist and have not been deployed before deploying
     '''
 
     help = 'Deploys configuration and services for the application'
@@ -25,7 +25,7 @@ class Command(BaseCommand):
         project_name = os.path.basename(os.path.normpath(settings.BASE_DIR))
 
         # ---------------------------- Update Config Files --------------------------- #
-        nginx = False # Flag to check if an Nginx config file is present.
+        nginx = False  # Flag to check if an Nginx config file is present.
 
         try:
             file_path = f'{settings.BASE_DIR}/{project_name}/config_files'
@@ -35,13 +35,12 @@ class Command(BaseCommand):
                     file_content = file.read()
                     file.close()
 
-                # Handle configfile with same name as project as web service config file.
+                # Handle config file with same name as project as web service config file.
                 if filename == project_name:
                     nginx = True
                     deploy_path = '/etc/nginx/sites-available/'
                 else:
                     deploy_path = '/etc/conf.d/'
-
 
                 # Create config file if it does not exist
                 with subprocess.Popen(['touch', f'{deploy_path}{filename}']) as script:
@@ -65,7 +64,6 @@ class Command(BaseCommand):
 
         except FileNotFoundError:
             print('No config_files files found')
-
 
         # --------------------------- Update Service Files --------------------------- #
         services = []
@@ -104,7 +102,6 @@ class Command(BaseCommand):
         except FileNotFoundError:
             print('No service_files files found')
 
-
         # Reload daemon and start services
         try:
             for service in services:
@@ -114,11 +111,13 @@ class Command(BaseCommand):
                 os.system(f'systemctl restart {service}')
                 # os.system('systemctl status *')
 
-            if nginx:
+            if nginx and not os.path.exists(f'/etc/nginx/sites-available/{project_name}'):
                 ngx = '/etc/nginx/sites-'
                 if not os.path.exists(f'{ngx}enabled/{project_name}'):
                     os.system(f'ln -s {ngx}available/{project_name} {ngx}enabled/{project_name}')
                 os.system('systemctl restart nginx')
+            else:
+                print('Nginx configuration file not replaced.')
 
         except SystemError:
             print('No services found')

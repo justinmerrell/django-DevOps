@@ -99,6 +99,7 @@ class Command(BaseCommand):
                 services.append(filename)
                 print(f'Updated {filename}')
 
+            print('-- Services Updated --')
         except FileNotFoundError:
             print('No service_files files found')
 
@@ -117,7 +118,7 @@ class Command(BaseCommand):
                     os.system(f'ln -s {ngx}available/{project_name} {ngx}enabled/{project_name}')
                 os.system('systemctl restart nginx')
             else:
-                print('Nginx configuration file not replaced.')
+                print(f'{project_name} site already available, Nginx file not replaced.')
 
         except SystemError:
             print('No services found')

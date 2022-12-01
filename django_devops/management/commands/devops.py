@@ -86,10 +86,21 @@ class Command(BaseCommand):
         except KeyError:
             if query_yes_no(f'System user "{PROJECT_NAME}" does not exist. Create it?'):
                 os.system(f'''
-                          adduser --system --home=/var/opt/{PROJECT_NAME}
-                          --no-create-home --disabled-password --group={PROJECT_NAME},www-data
-                          --shell=/bin/bash {PROJECT_NAME}
+                          adduser --system --no-create-home
+                          --disabled-password --ingroup=www-data
+                          --shell=/bin/bash --add_extra_groups {PROJECT_NAME}
                           ''')
+
+                os.system(f"addgroup --system {PROJECT_NAME}")
+
+                os.system(f"usermod -a -G {PROJECT_NAME} {PROJECT_NAME}")
+
+                os.system(f"chgrp -R {PROJECT_NAME} /opt/{PROJECT_NAME}")
+
+                os.system(f"chmod -R 775 /opt/{PROJECT_NAME}")
+
+        # -------------------------- Static File Permissions ------------------------- #
+        # chmod o+r - R
 
         # -------------------------- Python Package Versions ------------------------- #
         # Checks that requirements.txt exists, and if not, creates it.

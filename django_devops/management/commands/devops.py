@@ -86,7 +86,7 @@ class Command(BaseCommand):
         except KeyError:
             if query_yes_no(f'System user "{PROJECT_NAME}" does not exist. Create it?'):
                 os.system(f'''
-                          adduser --sytem --home=/var/opt/{PROJECT_NAME}
+                          adduser --system --home=/var/opt/{PROJECT_NAME}
                           --no-create-home --disabled-password --group={PROJECT_NAME},www-data
                           --shell=/bin/bash {PROJECT_NAME}
                           ''')

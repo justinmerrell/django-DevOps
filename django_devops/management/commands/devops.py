@@ -131,13 +131,13 @@ class Command(BaseCommand):
         pylint_workflow_file = f'{github_workflow_dir}/pylint.yml'
 
         if not os.path.exists(github_workflow_dir):
-            if query_yes_no(f'GitHub workflows directory is missing. Create it?'):
+            if query_yes_no('GitHub workflows directory is missing. Create it?'):
                 os.makedirs(github_workflow_dir)
             else:
                 raise CommandError('Please create the .github/workflows directory.')
 
         if not os.path.exists(pylint_workflow_file):
-            if query_yes_no(f'Pylint GitHub Action is missing. Create it?'):
+            if query_yes_no('Pylint GitHub Action is missing. Create it?'):
                 pylint_workflow_content = '''
                 name: Pylint
 

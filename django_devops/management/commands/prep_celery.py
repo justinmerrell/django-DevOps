@@ -1,5 +1,5 @@
 '''
-A programatic way to prepare and configure celery.
+A programmatic way to prepare and configure celery.
 '''
 
 import os
@@ -75,14 +75,14 @@ class Command(BaseCommand):
 
             WorkingDirectory = /opt/{PROJECT_NAME}
 
-            ExecStart   =   /bin/sh -c '/opt/{PROJECT_NAME}/env/bin/celery multi start ${{CELERYD_NODES}} \
+            ExecStart   =   /bin/sh -c '/opt/{PROJECT_NAME}/.venv/bin/celery multi start ${{CELERYD_NODES}} \
                             -A ${{CELERY_APP}} --pidfile=${{CELERYD_PID_FILE}} \
                             --logfile=${{CELERYD_LOG_FILE}} --loglevel=${{CELERYD_LOG_LEVEL}} $CELERYD_OPTS'
 
-            ExecStop    =   /bin/sh -c '/opt/{PROJECT_NAME}/env/bin/celery ${{CELERY_BIN}} multi stopwait ${{CELERYD_NODES}} \
+            ExecStop    =   /bin/sh -c '/opt/{PROJECT_NAME}/.venv/bin/celery ${{CELERY_BIN}} multi stopwait ${{CELERYD_NODES}} \
                             --pidfile=${{CELERYD_PID_FILE}}'
 
-            ExecReload  =   /bin/sh -c '/opt/{PROJECT_NAME}/env/bin/celery ${{CELERY_BIN}} multi restart ${{CELERYD_NODES}} \
+            ExecReload  =   /bin/sh -c '/opt/{PROJECT_NAME}/.venv/bin/celery ${{CELERY_BIN}} multi restart ${{CELERYD_NODES}} \
                             -A ${{CELERY_APP}} --pidfile=${{CELERYD_PID_FILE}} \
                             --logfile=${{CELERYD_LOG_FILE}} --loglevel=${{CELERYD_LOG_LEVEL}} $CELERYD_OPTS'
 
@@ -97,7 +97,7 @@ class Command(BaseCommand):
             # Name of nodes to start.
             CELERYD_NODES="worker"
 
-            CELERY_BIN="/opt/{PROJECT_NAME}/env/bin/celery"
+            CELERY_BIN="/opt/{PROJECT_NAME}/.venv/bin/celery"
 
             CELERY_APP="{PROJECT_NAME}"
 

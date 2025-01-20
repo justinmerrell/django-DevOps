@@ -1,5 +1,5 @@
 '''
-A programatic way to prepare a gunicorn config file.
+A programmatic way to prepare a gunicorn config file.
 '''
 
 import os
@@ -24,7 +24,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         '''
-        Verifies that the service folder exsists for use with django_devops
+        Verifies that the service folder exists for use with django_devops
         '''
         if not exists(f'{settings.BASE_DIR}/{PROJECT_NAME}/service_files'):
             raise CommandError(f'''
@@ -51,9 +51,9 @@ class Command(BaseCommand):
                             Group = {PROJECT_NAME}
                             WorkingDirectory = /opt/{PROJECT_NAME}/
 
-                            ExecStart   =   /opt/{PROJECT_NAME}/env/bin/gunicorn --access-logfile - --workers 5 --timeout 120 --bind unix:/opt/{PROJECT_NAME}/{PROJECT_NAME}.sock {PROJECT_NAME}.wsgi:application --reload
+                            ExecStart   =   /opt/{PROJECT_NAME}/.venv/bin/gunicorn --access-logfile - --workers 5 --timeout 120 --bind unix:/opt/{PROJECT_NAME}/{PROJECT_NAME}.sock {PROJECT_NAME}.wsgi:application --reload
 
-                            ExecReload  =   /opt/{PROJECT_NAME}/env/bin/gunicorn --access-logfile - --workers 5 --timeout 120 --bind unix:/opt/{PROJECT_NAME}/{PROJECT_NAME}.sock {PROJECT_NAME}.wsgi:application --reload
+                            ExecReload  =   /opt/{PROJECT_NAME}/.venv/bin/gunicorn --access-logfile - --workers 5 --timeout 120 --bind unix:/opt/{PROJECT_NAME}/{PROJECT_NAME}.sock {PROJECT_NAME}.wsgi:application --reload
 
                             Restart = always
 

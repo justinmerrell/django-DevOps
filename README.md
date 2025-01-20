@@ -50,14 +50,14 @@ For additional pip information visit: [https://pypi.org/project/django-DevOps/](
 
 ### Configuration Files
 
-Under your project folder create a ```config_files``` and ```service_files``` folder to place files to be deployed.
+Under your project folder create a `config_files` and `service_files` folder to place files to be deployed.
 
-A config file with the same name as the project will be treated as the NGINX config file and copied to site-available.
+A config file _with the same name_ as the project will be treated as the NGINX config file and copied to site-available.
 
 ## Manage Commands
 
 | Command          | Description                                                                                            |
-|------------------|--------------------------------------------------------------------------------------------------------|
+| ---------------- | ------------------------------------------------------------------------------------------------------ |
 | devops           | Guided project review. (Recommended)                                                                   |
 | do_guide_account | Walks through the guide for user account management.                                                   |
 | prep_gunicorn    | Prepares the gunicorn config file for use with gunicorn.                                               |

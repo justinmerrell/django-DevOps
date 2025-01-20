@@ -16,7 +16,7 @@ PROJECT_NAME = os.path.basename(os.path.normpath(settings.BASE_DIR))
 
 class Command(BaseCommand):
     '''
-    Programaticly create the sites-available file.
+    Programmatically create the sites-available file.
     '''
 
     help = 'Prepare the nginx config file.'

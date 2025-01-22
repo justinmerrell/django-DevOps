@@ -20,7 +20,7 @@ def ensure_directory_exists(dir_path: str) -> None:
     """
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
-        logger.info(f"Created directory: {dir_path}")
+        logger.info("Created directory: %s", dir_path)
 
 def deploy_file(src_path: str, dst_path: str) -> bool:
     """
@@ -33,7 +33,7 @@ def deploy_file(src_path: str, dst_path: str) -> bool:
         with open(src_path, 'r', encoding='UTF-8') as src_file:
             new_content = src_file.read()
     except FileNotFoundError:
-        logger.warning(f"Source file not found: {src_path}")
+        logger.warning("Source file not found: %s", src_path)
         return False
 
     # Read existing content (if any)
@@ -50,16 +50,16 @@ def deploy_file(src_path: str, dst_path: str) -> bool:
             backup_path = dst_path + '.old'
             with open(backup_path, 'w', encoding='UTF-8') as backup_file:
                 backup_file.write(old_content)
-            logger.info(f"Backed up old file to {backup_path}")
+            logger.info("Backed up old file to %s", backup_path)
 
         # Ensure the file exists (like touch) and write new content
         with open(dst_path, 'w', encoding='UTF-8') as dst_file:
             dst_file.write(new_content)
-        logger.info(f"Updated file: {dst_path}")
+        logger.info("Updated file: %s", dst_path)
         return True
 
     # If no change, do nothing
-    logger.info(f"No changes for {dst_path}")
+    logger.info("No changes for %s", dst_path)
     return False
 
 def manage_systemd_services(services: list) -> None:
@@ -77,7 +77,7 @@ def manage_systemd_services(services: list) -> None:
     for service in services:
         subprocess.run(['systemctl', 'enable', service], check=True)
         subprocess.run(['systemctl', 'restart', service], check=True)
-        logger.info(f"Enabled and restarted {service}")
+        logger.info("Enabled and restarted %s", service)
 
 class Command(BaseCommand):
     '''

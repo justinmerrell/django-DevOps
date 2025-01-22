@@ -12,7 +12,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django_devops.utils.user_input import query_yes_no
 
 PROJECT_NAME = os.path.basename(os.path.normpath(settings.BASE_DIR))
-
+PROJECT_DIR = f'/opt/{PROJECT_NAME}'
 
 def get_base_prefix_compat():
     '''
@@ -44,8 +44,7 @@ class Command(BaseCommand):
         2) Make recommendations for django-devops
         '''
         # ----------------------------- Verify Compliance ---------------------------- #
-        project_dir = f'/opt/{PROJECT_NAME}'
-        if not os.path.exists(project_dir):
+        if not os.path.exists(PROJECT_DIR):
             raise CommandError(f'{PROJECT_NAME} is not installed in /opt/')
         print(f'✓ - {PROJECT_NAME} is installed in /opt/')
 

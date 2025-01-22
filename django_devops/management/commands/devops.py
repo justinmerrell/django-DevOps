@@ -13,6 +13,8 @@ from django_devops.utils.user_input import query_yes_no
 
 PROJECT_NAME = os.path.basename(os.path.normpath(settings.BASE_DIR))
 PROJECT_DIR = f'/opt/{PROJECT_NAME}'
+ENV_FILE = f'{settings.BASE_DIR}/.env'
+REQUIREMENTS_FILE = f'{PROJECT_DIR}/requirements.txt'
 
 def get_base_prefix_compat():
     '''
@@ -54,8 +56,7 @@ class Command(BaseCommand):
         print(f'✓ - {PROJECT_NAME} is running in a virtual environment')
 
         # ---------------------------- Check For .env File --------------------------- #
-        env_file = f'{settings.BASE_DIR}/.env'
-        if not os.path.exists(env_file):
+        if not os.path.exists(ENV_FILE):
             raise CommandError(f'{PROJECT_NAME} is missing a .env file')
         print(f'✓ - {PROJECT_NAME} has a .env file')
 
@@ -98,9 +99,8 @@ class Command(BaseCommand):
         # chmod o+r - R
 
         # -------------------------- Python Package Versions ------------------------- #
-        requirements_file = f'/opt/{PROJECT_NAME}/requirements.txt'
-        if not os.path.exists(requirements_file):
-            if query_yes_no(f'{requirements_file} does not exist. Create it?'):
+        if not os.path.exists(REQUIREMENTS_FILE):
+            if query_yes_no(f'{REQUIREMENTS_FILE} does not exist. Create it?'):
                 os.system(f'pip freeze > /opt/{PROJECT_NAME}/requirements.txt')
             else:
                 raise CommandError('Please create the file requirements.txt.')
@@ -119,7 +119,7 @@ class Command(BaseCommand):
 
         if packages:
             if query_yes_no(f'These packages are missing fixed versions: {packages}. Fix them?'):
-                os.system(f'pip freeze > {requirements_file}')
+                os.system(f'pip freeze > {REQUIREMENTS_FILE}')
             else:
                 raise CommandError('Please fix the version numbers of the packages.')
         else:

@@ -156,7 +156,7 @@ class Command(BaseCommand):
             if not os.path.exists(enabled_path) and os.path.exists(available_path):
                 try:
                     subprocess.run(['ln', '-s', available_path, enabled_path], check=True)
-                    logger.info(f"Linked {available_path} to {enabled_path}")
+                    logger.info("Linked %s to %s", available_path, enabled_path)
                 except subprocess.CalledProcessError as e:
                     self.stderr.write(self.style.ERROR(f"Error linking Nginx config: {e}"))
 

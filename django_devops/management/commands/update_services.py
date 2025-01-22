@@ -1,7 +1,6 @@
 ''' Deploys configuration and services for the application '''
 
 import os
-import logging
 import subprocess
 
 from django.conf import settings

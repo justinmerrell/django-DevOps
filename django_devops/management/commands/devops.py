@@ -55,7 +55,7 @@ class Command(BaseCommand):
         print(f'✓ - {PROJECT_NAME} is running in a virtual environment')
 
         # ---------------------------- Check For .env File --------------------------- #
-        env_file = f'{settings.BASE_DIR}/{PROJECT_NAME}/.env'
+        env_file = f'{settings.BASE_DIR}/.env'
         if not os.path.exists(env_file):
             raise CommandError(f'{PROJECT_NAME} is missing a .env file')
         print(f'✓ - {PROJECT_NAME} has a .env file')
